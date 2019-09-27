@@ -16,9 +16,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
     var subtract = UIButton()
     var multiply = UIButton()
     var divide = UIButton()
+//    var operations = UISegmentedControl()
+    var calculate = UIButton()
     var BowserJr = UIImageView()
     var productLabel = UILabel()
     var stackView = UIStackView()
+    var operationStack = UIStackView()
+    var operation = ""
     override func viewDidLoad() {
         super.viewDidLoad()
         self.becomeFirstResponder()
@@ -40,7 +44,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
         stackView.alignment = UIStackView.Alignment.center
         stackView.spacing = 10
         stackView.addArrangedSubview(textField1)
+//        stackView.addArrangedSubview(operations)
+        stackView.addArrangedSubview(operationStack)
         stackView.addArrangedSubview(textField2)
+        stackView.addArrangedSubview(calculate)
         stackView.addArrangedSubview(productLabel)
 //        stackView.addArrangedSubview(BowserJr)
         self.view.addSubview(stackView)
@@ -48,12 +55,85 @@ class ViewController: UIViewController, UITextFieldDelegate {
         stackView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 50).isActive = true
         stackView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -50).isActive = true
         stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        operationStack.axis = .horizontal
+        operationStack.distribution = UIStackView.Distribution.equalSpacing
+        operationStack.addArrangedSubview(add)
+        operationStack.addArrangedSubview(subtract)
+        operationStack.addArrangedSubview(multiply)
+        operationStack.addArrangedSubview(divide)
         
         BowserJr.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: -270).isActive = true
         BowserJr.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 40).isActive = true
         BowserJr.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -40).isActive = true
+        
+        buttonSetup(arg: add, arg: "+")
+        buttonSetup(arg: subtract, arg: "-")
+        buttonSetup(arg: multiply, arg: "•")
+        buttonSetup(arg: divide, arg: "÷")
+        buttonSetup(arg: calculate, arg: "Calculate")
+        calculate.addTarget(self, action: #selector(self.calc), for: .touchUpInside)
+        add.addTarget(self, action: #selector(self.operate), for: .touchUpInside)
+        subtract.addTarget(self, action: #selector(self.operate), for: .touchUpInside)
+        multiply.addTarget(self, action: #selector(self.operate), for: .touchUpInside)
+        divide.addTarget(self, action: #selector(self.operate), for: .touchUpInside)
+        
+//        buttonSetup(arg: add, arg: "+")
+//        add.tag = 1
+        
+//        operations.insertSegment(withTitle: "+", at: 1, animated: true)
+//        operations.insertSegment(withTitle: "-", at: 2, animated: true)
+//        operations.insertSegment(withTitle: "•", at: 3, animated: true)
+//        operations.insertSegment(withTitle: "÷", at: 4, animated: true)
+//        operations.setTitleTextAttributes([NSAttributedString.Key.font:UIFont.systemFont(ofSize: 20, weight: .bold)], for: .normal)
+        
+        
     }
-    
+
+    @objc func calc (sender: UIButton!)
+    {
+        doMath()
+    }
+    @objc func operate (sender: UIButton!)
+    {
+        if (sender == add)
+        {
+            operation = "+"
+            add.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .bold)
+            subtract.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            multiply.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            divide.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+        }
+        if (sender == subtract)
+        {
+            operation = "-"
+            add.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            subtract.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .bold)
+            multiply.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            divide.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+        }
+        if (sender == multiply)
+        {
+            operation = "•"
+            add.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            subtract.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            multiply.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .bold)
+            divide.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+        }
+        if (sender == divide)
+        {
+            operation = "÷"
+            add.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            subtract.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            multiply.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            divide.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .bold)
+        }
+    }
+    func buttonSetup (arg button: UIButton, arg title: String)
+    {
+        button.setTitle(title, for: .normal)
+        button.setTitleColor(UIColor.black, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .bold)
+    }
     func textFieldSetup (arg txtFld: UITextField)
     {
         txtFld.delegate = self
@@ -75,32 +155,40 @@ class ViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
+        doMath()
         
-        
-        
-        if(checkIfInt(arg: (Double(textField1.text ?? "1.0")!) * (Double(textField2.text ?? "1.0")!)))
-        {
-            productLabel.text = String(Int((Double(textField1.text ?? "1.0")!)*(Double(textField2.text ?? "1.0")!)))
-            if (Int((Double(textField1.text ?? "1.0")!)*(Double(textField2.text ?? "1.0")!)) == 64)
-            {
-                BowserJr.isHidden = false
-            }
-        }
-        else
-        {
-            productLabel.text = String((Double(textField1.text ?? "1.0")!)*(Double(textField2.text ?? "1.0")!))
-        }
         return true
     }
-    func checkIfInt (arg x: Double) -> Bool
+    func doMath ()
     {
-        let isInteger = floor(x)
-        if  (isInteger == x)
+        if (operation == "+")
         {
-            return true
+            productLabel.text = String((Double(textField1.text ?? "1.0")!) + (Double(textField2.text ?? "1.0")!))
         }
-        return false
+        if (operation == "-")
+        {
+            productLabel.text = String((Double(textField1.text ?? "1.0")!) - (Double(textField2.text ?? "1.0")!))
+        }
+        if (operation == "•")
+        {
+            productLabel.text = String((Double(textField1.text ?? "1.0")!) * (Double(textField2.text ?? "1.0")!))
+        }
+        if (operation == "÷")
+        {
+            productLabel.text = String((Double(textField1.text ?? "1.0")!) / (Double(textField2.text ?? "1.0")!))
+        }
+        if (operation == "")
+        {
+            productLabel.text = "Choose an operation"
+        }
+        let isInteger = floor(Double(productLabel.text ?? "1.0")!)
+        if  (isInteger == Double(productLabel.text ?? "1.0")!)
+        {
+            productLabel.text = String(Int(productLabel.text ?? "1.0")!)
+        }
+        if productLabel.text == "64"
+        {
+            BowserJr.isHidden = false
+        }
     }
-
-
 }
