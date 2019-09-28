@@ -92,13 +92,18 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @objc func calc (sender: UIButton!)
     {
         doMath()
+        add.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+        subtract.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+        multiply.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+        divide.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+        operation = ""
     }
     @objc func operate (sender: UIButton!)
     {
         if (sender == add)
         {
             operation = "+"
-            add.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .bold)
+            add.titleLabel?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
             subtract.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
             multiply.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
             divide.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
@@ -107,7 +112,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         {
             operation = "-"
             add.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
-            subtract.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .bold)
+            subtract.titleLabel?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
             multiply.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
             divide.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
         }
@@ -116,7 +121,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
             operation = "•"
             add.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
             subtract.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
-            multiply.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .bold)
+            multiply.titleLabel?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
             divide.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
         }
         if (sender == divide)
@@ -125,7 +130,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
             add.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
             subtract.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
             multiply.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
-            divide.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .bold)
+            divide.titleLabel?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
         }
     }
     func buttonSetup (arg button: UIButton, arg title: String)
@@ -155,40 +160,52 @@ class ViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         
-        doMath()
+//        doMath()
+        calc(sender: calculate)
         
         return true
     }
     func doMath ()
     {
-        if (operation == "+")
+        if (operation == "" || textField1.text == "" || textField2.text == "")
         {
-            productLabel.text = String((Double(textField1.text ?? "1.0")!) + (Double(textField2.text ?? "1.0")!))
+            productLabel.text = "Some of the required fields are empty."
         }
-        if (operation == "-")
+        else
         {
-            productLabel.text = String((Double(textField1.text ?? "1.0")!) - (Double(textField2.text ?? "1.0")!))
-        }
-        if (operation == "•")
-        {
-            productLabel.text = String((Double(textField1.text ?? "1.0")!) * (Double(textField2.text ?? "1.0")!))
-        }
-        if (operation == "÷")
-        {
-            productLabel.text = String((Double(textField1.text ?? "1.0")!) / (Double(textField2.text ?? "1.0")!))
-        }
-        if (operation == "")
-        {
-            productLabel.text = "Choose an operation"
-        }
-        let isInteger = floor(Double(productLabel.text ?? "1.0")!)
-        if  (isInteger == Double(productLabel.text ?? "1.0")!)
-        {
-            productLabel.text = String(Int(productLabel.text ?? "1.0")!)
-        }
-        if productLabel.text == "64"
-        {
-            BowserJr.isHidden = false
+            let x = Double((textField1.text)!)
+            let y = Double((textField2.text)!)
+            var result = Double()
+            if (operation == "+")
+            {
+                result = (x)! + (y)!
+            }
+            if (operation == "-")
+            {
+                result = (x)! - (y)!
+            }
+            if (operation == "•")
+            {
+                result = (x)! * (y)!
+            }
+            if (operation == "÷")
+            {
+                result = (x)! / (y)!
+            }
+            let isInteger = floor(result)
+            if  (isInteger == result)
+            {
+                productLabel.text = "\((textField1.text)!) \(operation) \((textField2.text)!) = \(Int(result))"
+                if (result == 64)
+                {
+                    BowserJr.isHidden = false
+                }
+            }
+            else
+            {
+                productLabel.text = "\((textField1.text)!) \(operation) \((textField2.text)!) = \(result)"
+            }
+            
         }
     }
 }
