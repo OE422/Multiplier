@@ -15,11 +15,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
     var add = UIButton()
     var subtract = UIButton()
     var multiply = UIButton()
+    var sqrt = UIButton()
+    var sqr = UIButton()
     var divide = UIButton()
 //    var operations = UISegmentedControl()
     var calculate = UIButton()
     var BowserJr = UIImageView()
-    var productLabel = UILabel()
+    var resultLabel = UILabel()
     var stackView = UIStackView()
     var operationStack = UIStackView()
     var operation = ""
@@ -48,7 +50,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         stackView.addArrangedSubview(operationStack)
         stackView.addArrangedSubview(textField2)
         stackView.addArrangedSubview(calculate)
-        stackView.addArrangedSubview(productLabel)
+        stackView.addArrangedSubview(resultLabel)
 //        stackView.addArrangedSubview(BowserJr)
         self.view.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -61,6 +63,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         operationStack.addArrangedSubview(subtract)
         operationStack.addArrangedSubview(multiply)
         operationStack.addArrangedSubview(divide)
+        operationStack.addArrangedSubview(sqrt)
+        operationStack.addArrangedSubview(sqr)
         
         BowserJr.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: -270).isActive = true
         BowserJr.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 40).isActive = true
@@ -70,12 +74,16 @@ class ViewController: UIViewController, UITextFieldDelegate {
         buttonSetup(arg: subtract, arg: "-")
         buttonSetup(arg: multiply, arg: "•")
         buttonSetup(arg: divide, arg: "÷")
+        buttonSetup(arg: sqrt, arg: "√")
+        buttonSetup(arg: sqr, arg: "^")
         buttonSetup(arg: calculate, arg: "Calculate")
         calculate.addTarget(self, action: #selector(self.calc), for: .touchUpInside)
         add.addTarget(self, action: #selector(self.operate), for: .touchUpInside)
         subtract.addTarget(self, action: #selector(self.operate), for: .touchUpInside)
         multiply.addTarget(self, action: #selector(self.operate), for: .touchUpInside)
         divide.addTarget(self, action: #selector(self.operate), for: .touchUpInside)
+        sqrt.addTarget(self, action: #selector(self.operate), for: .touchUpInside)
+        sqr.addTarget(self, action: #selector(self.operate), for: .touchUpInside)
         
 //        buttonSetup(arg: add, arg: "+")
 //        add.tag = 1
@@ -96,6 +104,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         subtract.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
         multiply.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
         divide.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+        sqrt.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+        sqr.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
         operation = ""
     }
     @objc func operate (sender: UIButton!)
@@ -107,6 +117,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
             subtract.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
             multiply.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
             divide.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            sqrt.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            sqr.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
         }
         if (sender == subtract)
         {
@@ -115,6 +127,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
             subtract.titleLabel?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
             multiply.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
             divide.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            sqrt.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            sqr.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
         }
         if (sender == multiply)
         {
@@ -123,6 +137,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
             subtract.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
             multiply.titleLabel?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
             divide.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            sqrt.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            sqr.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
         }
         if (sender == divide)
         {
@@ -131,6 +147,28 @@ class ViewController: UIViewController, UITextFieldDelegate {
             subtract.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
             multiply.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
             divide.titleLabel?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
+            sqrt.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            sqr.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+        }
+        if (sender == sqrt)
+        {
+            operation = "√"
+            sqrt.titleLabel?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
+            add.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            subtract.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            multiply.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            divide.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            sqr.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+        }
+        if (sender == sqr)
+        {
+            operation = "^"
+            sqrt.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            add.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            subtract.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            multiply.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            divide.titleLabel?.font = UIFont.systemFont(ofSize: 14.0, weight: .regular)
+            sqr.titleLabel?.font = UIFont.systemFont(ofSize: 22.0, weight: .bold)
         }
     }
     func buttonSetup (arg button: UIButton, arg title: String)
@@ -153,24 +191,49 @@ class ViewController: UIViewController, UITextFieldDelegate {
         self.view.addSubview(txtFld)
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
+    {
         view.endEditing(true)
     }
     
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool
+    {
         textField.resignFirstResponder()
         
-//        doMath()
         calc(sender: calculate)
         
         return true
     }
     func doMath ()
     {
-        if (operation == "" || textField1.text == "" || textField2.text == "")
+        
+        if (operation == "")
         {
-            productLabel.text = "Some of the required fields are empty."
+            resultLabel.text = "Choose an operation"
         }
+        else if (operation == "√")
+        {
+            let result = (Double(textField1.text ?? "1.0" )!).squareRoot()
+            let isInteger = floor(result)
+            if  (isInteger == result)
+            {
+                resultLabel.text = "\(operation)\((textField1.text)!) \((textField2.text)!) = \(Int(result))"
+                BowserJr.isHidden = true
+                if (result == 64)
+                {
+                    BowserJr.isHidden = false
+                }
+            }
+            else
+            {
+                resultLabel.text = "\(operation)\((textField1.text)!) \((textField2.text)!) = \(result)"
+            }
+        }
+        else if (textField1.text == "" || textField2.text == "")
+        {
+            resultLabel.text = "Some of the required fields are filled with invalid entries."
+        }
+        
         else
         {
             let x = Double((textField1.text)!)
@@ -192,10 +255,19 @@ class ViewController: UIViewController, UITextFieldDelegate {
             {
                 result = (x)! / (y)!
             }
+            if (operation == "√")
+            {
+                result = (x)! / (y)!
+            }
+            if (operation == "^")
+            {
+                result = pow((x)!, (y)!)
+            }
             let isInteger = floor(result)
             if  (isInteger == result)
             {
-                productLabel.text = "\((textField1.text)!) \(operation) \((textField2.text)!) = \(Int(result))"
+                resultLabel.text = "\((textField1.text)!) \(operation) \((textField2.text)!) = \(Int(result))"
+                BowserJr.isHidden = true
                 if (result == 64)
                 {
                     BowserJr.isHidden = false
@@ -203,7 +275,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
             }
             else
             {
-                productLabel.text = "\((textField1.text)!) \(operation) \((textField2.text)!) = \(result)"
+                resultLabel.text = "\((textField1.text)!) \(operation) \((textField2.text)!) = \(result)"
             }
             
         }
